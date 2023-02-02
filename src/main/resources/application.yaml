@@ -9,7 +9,7 @@ spring:
   # ViewTemplate thymeleaf ?? set
   thymeleaf:
     prefix: classpath:templates/
-    suffix: .jsp
+    suffix: .html
     cache: false
 
   servlet:
