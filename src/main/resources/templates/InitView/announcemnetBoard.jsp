@@ -10,13 +10,13 @@
 <title>JSP 게시판 웹 사이트</title>
 </head>
 <body>
-<%
-    String userID = null; // 로그인이 된 사람들은 로그인정보를 담을 수 있도록한다
-    if (session.getAttribute("userID") != null)
-    {
-        userID = (String)session.getAttribute("userID");
-    }
-%>
+<%--<%--%>
+<%--    String userID = null; // 로그인이 된 사람들은 로그인정보를 담을 수 있도록한다--%>
+<%--    if (session.getAttribute("userID") != null)--%>
+<%--    {--%>
+<%--        userID = (String)session.getAttribute("userID");--%>
+<%--    }--%>
+<%--%>--%>
     <nav class ="navbar navbar-default">
         <div class="navbar-header"> <!-- 홈페이지의 로고 -->
             <button type="button" class="navbar-toggle collapsed"
@@ -34,11 +34,11 @@
 			<li><a href="freeBoard.jsp">자유게시판</a></li>
 			<li><a href="faqBoard.jsp">FAQ</a></li>
             </ul>
-            <%
-            // 접속하기는 로그인이 되어있지 않은 경우만 나오게한다
-                if(userID == null)
-                {
-            %>
+<%--            <%--%>
+<%--            // 접속하기는 로그인이 되어있지 않은 경우만 나오게한다--%>
+<%--                if(userID == null)--%>
+<%--                {--%>
+<%--            %>--%>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                 <a href="#" class = "dropdown-toggle"
@@ -50,10 +50,10 @@
                     </ul>
                 </li>
             </ul>
-            <%
-            // 로그인이 되어있는 사람만 볼수 있는 화면
-                } else {
-            %>
+<%--            <%--%>
+<%--            // 로그인이 되어있는 사람만 볼수 있는 화면--%>
+<%--                } else {--%>
+<%--            %>--%>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                 <a href="#" class = "dropdown-toggle"
@@ -64,9 +64,9 @@
                     </ul>
                 </li>
             </ul>
-            <%
-                }
-            %>
+<%--            <%--%>
+<%--                }--%>
+<%--            %>--%>
         </div>
     </nav>
     <div class="container">
