@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team3.mapper.UserInfoMapper">
+
+    <!-- 게시물 상세 쿼리 1:1 데이터 조회 -->
+    <select id="findUser" parameterType="com.team3.dto.UserInfoDto" resultType="int">
+        SELECT EXISTS(
+                       SELECT 1
+                       FROM USER_INFO
+                       WHERE USER_ID = #{id}
+                         AND PASSWORD = #{password}
+                   )
+
+    </select>
+
+    <select id="idCheck" parameterType="String" resultType="int">
+        SELECT count(USER_ID)
+        FROM USER_INFO
+        WHERE USER_ID = #{id}
+    </select>
+
+    <insert id="insertUserInfo" parameterType="com.team3.dto.UserInfoDto">
+        INSERT INTO USER_INFO
+            (USER_ID, PASSWORD, NAME, PHONENUMBER)
+        VALUES (#{id}, #{password}, #{name}, #{phoneNumber})
+    </insert>
+    <!-- 게시물 등록 쿼리 -->
+    <!--    <insert id="addUser" parameterType="com.example.domain.Board">-->
+    <!--        INSERT INTO USER_INFO-->
+    <!--        (-->
+    <!--            USER_ID, PASSWORD, NAME, PHONENUMBER-->
+    <!--        )-->
+    <!--        VALUES-->
+    <!--            (-->
+    <!--                #{id},-->
+    <!--                #{password},-->
+    <!--                #{name},-->
+    <!--                #{phoneNumber}-->
+    <!--            )-->
+    <!--    </insert>-->
+
+    <!-- 게시물 업데이트 쿼리 -->
+    <!--    <update id="updateBoard" parameterType="com.example.domain.Board">-->
+    <!--        UPDATE T_BOARD-->
+    <!--        SET-->
+    <!--            BOARD_TYPE = #{boardType},-->
+    <!--            TITLE = #{title},-->
+    <!--            CONTENTS = #{contents},-->
+    <!--            USER_NAME = #{userName}-->
+    <!--        WHERE BOARD_SEQ = #{boardSeq}-->
+    <!--    </update>-->
+
+    <!-- 게시물 삭제 쿼리 -->
+    <!--    <delete id="deleteBoard" parameterType="int">-->
+    <!--        DELETE FROM T_BOARD-->
+    <!--        WHERE BOARD_SEQ = #{boardSeq}-->
+    <!--    </delete>-->
+
+</mapper>
