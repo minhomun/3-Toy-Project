@@ -1,19 +1,20 @@
 package com.team3.controller;
 
-import com.team3.dto.UserInfoDto;
+import com.team3.domain.Role;
+import com.team3.domain.SecurityUser;
+import com.team3.domain.UserInfoDto;
 import com.team3.service.UserInfoService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 
@@ -23,18 +24,18 @@ public class UserInfoController {
     final Logger logger = LoggerFactory.getLogger(getClass());
     private final UserInfoService userInfoService;
 
-    @RequestMapping({"/", "/login"})
-    public String loginPage() {
+    @GetMapping({"/", "/login"})
+    public String loginPage(Model model) {
+        System.out.println("/login");
+        model.addAttribute("user", new LoginRequest());
         return "login";
     }
-
-    @PostMapping("/findUser")
-    public String findUser(Model model, HttpSession session, UserInfoDto userInfo){
+    @PostMapping("/loginProcess")
+    public String checkUserInfo(Model model, UserInfoDto userInfo){
         System.out.println(userInfo.getId());
         System.out.println(userInfo.getPassword());
-        boolean isAdministrated = userInfoService.findUser(userInfo);
+        boolean isAdministrated = userInfoService.checkUserInfo(userInfo);
         if (isAdministrated == true){
-            session.setAttribute("id", userInfo.getId());
             System.out.println("성공!");
             model.addAttribute("msg", "로그인을 성공하였습니다.");
 
@@ -55,7 +56,6 @@ public class UserInfoController {
     @RequestMapping("idCheck")
     @ResponseBody
     public int idCheck(Model model, String id){
-
         return userInfoService.idCheck(id);
     }
     @PostMapping("/registration")
@@ -79,9 +79,9 @@ public class UserInfoController {
 
     //아래 나중에 지우면됨
     @RequestMapping("notice")
-    public String notice(){
-        return "notice";
+    public String notice(Model model, Authentication authentication){
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        model.addAttribute("user", securityUser);
+        return "/notice";
     }
-
-
 }
