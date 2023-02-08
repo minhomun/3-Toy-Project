@@ -45,4 +45,12 @@
                    )
     </insert>
 
+    <update id="updateNoticeBoard" parameterType="com.team3.domain.NoticeBoard">
+        UPDATE notice_table
+        SET
+            TITLE = #{title},
+            CONTENT = #{content}
+        WHERE TABLE_NO = #{tableNo}
+    </update>
+
 </mapper>

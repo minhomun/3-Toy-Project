@@ -28,5 +28,9 @@ public class NoticeBoardService {
         noticeBoardMapper.insertNoticeBoard(noticeBoardDTO);
     }
 
+    public void updateNoticeBoard(NoticeBoard noticeBoard) {
+        noticeBoardMapper.updateNoticeBoard(noticeBoard);
+    }
+
 
 }

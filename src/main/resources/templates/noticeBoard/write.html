@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width", initial-scale="1" >  <!-- 반응형 웹에 사용하는 메타태그 -->
-  <link rel="stylesheet" href="../css/bootstrap.css"> <!-- 참조  -->
+  <link rel="stylesheet" href="/css/bootstrap.css"> <!-- 참조  -->
 
   <title>JSP 게시판 웹 사이트</title>
 </head>
@@ -55,6 +55,8 @@
 <div class="container">
   <div class="row">
     <form th:action="${board == null ? '/noticeboard/save' : '/noticeboard/update'}" method="post">
+      <input type="hidden" name="tableNo" th:if="${board != null}" th:value="${board.tableNo}">
+
       <table class="table table-striped" style="text-align:center; border:1px solid #dddddd">
         <thead>
         <tr>
@@ -70,12 +72,13 @@
         </tr>
         </tbody>
       </table>
+      <a class="btn btn-primary" href="/noticeboard" role="button">목록</a>
       <button type="submit" class="btn btn-primary">등록하기</button>
     </form>
   </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="../js/bootstrap.js"></script>
+<script src="/js/bootstrap.js"></script>
 </body>
 </html>

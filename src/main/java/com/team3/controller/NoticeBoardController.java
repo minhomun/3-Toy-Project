@@ -56,13 +56,6 @@ public class NoticeBoardController {
         return "noticeBoard/write";
     }
 
-    @GetMapping("/edit/{tableNo}")
-    public String edit(Model model, @PathVariable BigInteger tableNo) {
-        NoticeBoard noticeBoard = noticeBoardService.selectNoticeBoard(tableNo);
-        model.addAttribute("board", noticeBoard);
-        return "noticeBoard/write";
-    }
-
     @PostMapping("/save")
     public String save(Model model, HttpSession httpSession, @RequestParam String title, @RequestParam String content){
 
@@ -115,5 +108,81 @@ public class NoticeBoardController {
         log.info("작동하나요?4");
 
         return "redirect:/noticeboard";
+    }
+
+    @GetMapping("/edit/{tableNo}")
+    public String edit(Model model,
+                       @PathVariable BigInteger tableNo,
+                       HttpSession httpSession) {
+        NoticeBoard noticeBoard = noticeBoardService.selectNoticeBoard(tableNo);
+
+        // 본인만 수정 가능
+//        String userId = (String) httpSession.getAttribute("userId");
+//        if (userId != noticeBoard.getUserId()) {
+//            model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
+//            model.addAttribute("url", String.valueOf(userId));
+//            return "/noticeBoard/redirect";
+//        }
+        
+        model.addAttribute("board", noticeBoard);
+        return "noticeBoard/write";
+    }
+
+    @PostMapping("/update")
+    public String update(Model model, HttpSession httpSession,
+                         @RequestParam String title,
+                         @RequestParam String content,
+                         @RequestParam(required = false) BigInteger tableNo){
+
+        log.info("작동하나요?");
+
+        if (title.length() == 0 || title.equals("")) {
+            model.addAttribute("message", "제목을 입력해 주세요.");
+            model.addAttribute("url", "write");
+            return "/noticeBoard/redirect";
+        }
+        if (title.length() < 2 || title.length() > 50) {
+            model.addAttribute("message", "제목은 2~50자 사이만 작성할 수 있습니다.");
+            model.addAttribute("url", "write");
+            return "/noticeBoard/redirect";
+        }
+        if (content.length() == 0 || content.equals("")) {
+            model.addAttribute("message", "내용을 입력해 주세요.");
+            model.addAttribute("url", "write");
+            return "/noticeBoard/redirect";
+        }
+        if (content.length() < 10 || content.length() > 500) {
+            model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
+            model.addAttribute("url", "write");
+            return "/noticeBoard/redirect";
+        }
+
+
+        log.info("작동하나요?2");
+
+        // session 부분 일단 주석 처리
+
+//        String userId = (String) httpSession.getAttribute("userId");
+//        BigInteger userNo = (BigInteger) httpSession.getAttribute("userNO");
+
+
+        String userId = "normal";
+        BigInteger userNo = BigInteger.valueOf(2);
+
+        NoticeBoard noticeBoard = NoticeBoard.builder()
+                .tableNo(tableNo)
+                .userNo(userNo)
+                .userId(userId)
+                .title(title)
+                .content(content)
+                .build();
+
+        log.info("작동하나요?3");
+
+        noticeBoardService.updateNoticeBoard(noticeBoard);
+
+        log.info("작동하나요?4");
+
+        return "redirect:/noticeboard/" + tableNo;
     }
 }
