@@ -17,4 +17,6 @@ public interface NoticeBoardMapper {
     public void insertNoticeBoard(NoticeBoardDTO noticeBoardDTO);
 
     public void updateNoticeBoard(NoticeBoard noticeBoard);
+
+    public void deleteNoticeBoard(BigInteger tableNo);
 }

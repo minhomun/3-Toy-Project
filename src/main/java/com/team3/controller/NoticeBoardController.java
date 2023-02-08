@@ -57,7 +57,7 @@ public class NoticeBoardController {
     }
 
     @PostMapping("/save")
-    public String save(Model model, HttpSession httpSession, @RequestParam String title, @RequestParam String content){
+    public String save(Model model, HttpSession httpSession, @RequestParam String title, @RequestParam String content) {
 
         log.info("작동하나요?");
 
@@ -123,7 +123,7 @@ public class NoticeBoardController {
 //            model.addAttribute("url", String.valueOf(userId));
 //            return "/noticeBoard/redirect";
 //        }
-        
+
         model.addAttribute("board", noticeBoard);
         return "noticeBoard/write";
     }
@@ -132,7 +132,7 @@ public class NoticeBoardController {
     public String update(Model model, HttpSession httpSession,
                          @RequestParam String title,
                          @RequestParam String content,
-                         @RequestParam(required = false) BigInteger tableNo){
+                         @RequestParam(required = false) BigInteger tableNo) {
 
         log.info("작동하나요?");
 
@@ -184,5 +184,27 @@ public class NoticeBoardController {
         log.info("작동하나요?4");
 
         return "redirect:/noticeboard/" + tableNo;
+    }
+
+    @GetMapping("/delete/{tableNo}")
+    public String delete(Model model,
+                         @PathVariable BigInteger tableNo,
+                         HttpSession httpSession) {
+
+        // 본인만 삭제 가능
+//        String userId = (String) httpSession.getAttribute("userId");
+//        if (userId != noticeBoard.getUserId()) {
+//            model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
+//            model.addAttribute("url", String.valueOf(userId));
+//            return "/noticeBoard/redirect";
+//        }
+
+        log.info("되나?1");
+        noticeBoardService.deleteNoticeBoard(tableNo);
+
+        log.info("되나?2");
+        model.addAttribute("message", "삭제 되었습니다.");
+        model.addAttribute("url", "/noticeboard");
+        return "/noticeBoard/redirect";
     }
 }

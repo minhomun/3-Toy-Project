@@ -32,5 +32,8 @@ public class NoticeBoardService {
         noticeBoardMapper.updateNoticeBoard(noticeBoard);
     }
 
+    public void deleteNoticeBoard(BigInteger tableNo) {
+        noticeBoardMapper.deleteNoticeBoard(tableNo);
+    }
 
 }

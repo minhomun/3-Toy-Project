@@ -53,4 +53,9 @@
         WHERE TABLE_NO = #{tableNo}
     </update>
 
+    <delete id="deleteNoticeBoard" parameterType="BigInteger">
+        DELETE FROM notice_table
+        WHERE TABLE_NO = #{tableNo}
+    </delete>
+
 </mapper>
