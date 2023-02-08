@@ -10,4 +10,6 @@ import java.util.List;
 public interface NoticeBoardCommentMapper {
 
     public List<NoticeBoardComment> selectNoticeBoardCommentList(BigInteger tableNo);
+
+    public void save(NoticeBoardComment comment);
 }

@@ -74,13 +74,14 @@
         <tbody>
         <tr th:each="comment: ${commentList}">
           <td>
-            <pre>[[${comment.content}]]<div style="font-size: 5px; float: right">([[${comment.userId}]]  [[${comment.date}]])</div><div class="text-right"><span><button type="submit" name="submit" value="update">수정</button></span><span><button type="submit" name="submit" value="delete">삭제</button></span></div></pre>
+            <pre>[[${comment.content}]]<div style="font-size: 5px; float: right">([[${comment.userId}]]  [[${comment.date}]])</div><div class="text-right"><span><button type="submit" name="submit" value="update">수정</button>   </span><span><button type="submit" name="submit" value="delete">삭제</button></span></div></pre>
           </td>
         </tr>
         </tbody>
       </table>
-      <form class="d-flex">
-        <input class="form-control me-2" type="text" placeholder="댓글" aria-label="Search" name="query">
+      <form class="d-flex" action="/noticeboardComment/save">
+        <input type="hidden" name="tableNo" th:value="${board.tableNo}">
+        <input class="form-control me-2" type="text" placeholder="댓글" aria-label="Search" name="content">
         <div style="width:80px;float: right;">
           <button class="btn btn-primary me-md-2"  type="submit" style=" margin-top: 10px">입력</button>
         </div>

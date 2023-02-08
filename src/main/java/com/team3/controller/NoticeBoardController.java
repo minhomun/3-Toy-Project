@@ -25,6 +25,13 @@ public class NoticeBoardController {
 
     private final NoticeBoardCommentService noticeBoardCommentService;
 
+
+    /**
+     * 목록 화면
+     * @param model
+     * @param query
+     * @return
+     */
     @GetMapping
     public String displayBoard(Model model, @RequestParam(required = false) String query) {
         log.info("실행됨?");
@@ -36,6 +43,13 @@ public class NoticeBoardController {
         return "noticeBoard/list";
     }
 
+    /**
+     * 게시물 화면
+     * @param model
+     * @param tableNo
+     * @return
+     */
+    
     @GetMapping("/{tableNo}")
     public String displayBoard(Model model, @PathVariable("tableNo") BigInteger tableNo) {
         log.info("dispalyBoard 실행");
@@ -50,12 +64,25 @@ public class NoticeBoardController {
     }
 
 
+    /**
+     * 등록 화면
+     * @param model
+     * @return
+     */
     @GetMapping("/write")
     public String write(Model model) {
 
         return "noticeBoard/write";
     }
 
+    /**
+     * 게시글 등록
+     * @param model
+     * @param httpSession
+     * @param title
+     * @param content
+     * @return
+     */
     @PostMapping("/save")
     public String save(Model model, HttpSession httpSession, @RequestParam String title, @RequestParam String content) {
 
@@ -110,6 +137,13 @@ public class NoticeBoardController {
         return "redirect:/noticeboard";
     }
 
+    /**
+     * 수정 화면
+     * @param model
+     * @param tableNo
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/edit/{tableNo}")
     public String edit(Model model,
                        @PathVariable BigInteger tableNo,
@@ -128,6 +162,15 @@ public class NoticeBoardController {
         return "noticeBoard/write";
     }
 
+    /**
+     * 게시글 수정
+     * @param model
+     * @param httpSession
+     * @param title
+     * @param content
+     * @param tableNo
+     * @return
+     */
     @PostMapping("/update")
     public String update(Model model, HttpSession httpSession,
                          @RequestParam String title,
@@ -186,6 +229,13 @@ public class NoticeBoardController {
         return "redirect:/noticeboard/" + tableNo;
     }
 
+    /**
+     * 게시글 삭제
+     * @param model
+     * @param tableNo
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/delete/{tableNo}")
     public String delete(Model model,
                          @PathVariable BigInteger tableNo,

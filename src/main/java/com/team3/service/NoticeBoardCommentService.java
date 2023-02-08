@@ -17,4 +17,8 @@ public class NoticeBoardCommentService {
     public List<NoticeBoardComment> selectNoticeBoardList(BigInteger tableNo) {
         return noticeBoardCommentMapper.selectNoticeBoardCommentList(tableNo);
     }
+
+    public void save(NoticeBoardComment comment) {
+        noticeBoardCommentMapper.save(comment);
+    }
 }

@@ -17,6 +17,18 @@
         ORDER BY COMMENT_NO DESC
     </select>
 
+    <insert id="save" parameterType="com.team3.domain.NoticeBoardComment">
+        INSERT INTO notice_table_comment
+        VALUES
+            (
+                null,
+                #{tableNo},
+                #{userNo},
+                #{userId},
+                #{content},
+                Now()
+            )
+    </insert>
 
 
 </mapper>
