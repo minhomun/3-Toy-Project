@@ -8,15 +8,29 @@
     <select id="selectNoticeBoardList" parameterType="String"
             resultType="com.team3.domain.NoticeBoard">
         SELECT
-        TABLE_NO,
-        TITLE,
-        USER_ID,
-        DATE
-        FROM notice_table
+            TABLE_NO,
+            TITLE,
+            USER_ID,
+            DATE
+        FROM
+            notice_table
         <if test="query != null and query.length() > 0">
             WHERE TITLE LIKE CONCAT('%', CONCAT(#{query}, '%'))
         </if>
         ORDER BY TABLE_NO DESC
+    </select>
+
+    <select id="selectNoticeBoard" parameterType="BigInteger"
+            resultType="com.team3.domain.NoticeBoard">
+        SELECT
+            TABLE_NO,
+            TITLE,
+            CONTENT,
+            USER_ID,
+            DATE
+        FROM
+            notice_table
+        WHERE TABLE_NO = #{tableNo}
     </select>
 
 </mapper>

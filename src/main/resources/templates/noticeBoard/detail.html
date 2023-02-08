@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width", initial-scale="1" >  <!-- 반응형 웹에 사용하는 메타태그 -->
-  <link rel="stylesheet" href="css/bootstrap.css"> <!-- 참조  -->
+  <link rel="stylesheet" href="../css/bootstrap.css"> <!-- 참조  -->
   <title>공지사항 게시판 </title>
 </head>
 <body>
@@ -21,7 +21,7 @@
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <li><a href="noticeBoard">공지사항</a></li>
+      <li><a href="announcemnetBoard.jsp">공지사항</a></li>
       <li><a href="freeBoard.jsp">자유게시판</a></li>
       <li><a href="faqBoard.jsp">FAQ</a></li>
     </ul>
@@ -53,57 +53,55 @@
 </nav>
 
 
-
-<div class="container">
-  <div class="row">
-    <table class="table table-striped" style="text-align:center; border:1px solid #dddddd">
-      <thead>
-      <tr>
-        <th style="background-color:#eeeeee; text-align:center;">번호</th>
-        <th style="background-color:#eeeeee; text-align:center;">제목</th>
-        <th style="background-color:#eeeeee; text-align:center;">작성자</th>
-        <th style="background-color:#eeeeee; text-align:center;">작성일</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- 게시물 목록을 반복 -->
-      <tr th:each="board : ${boardList}">
-        <td>[[${board.tableNo}]]</td>
-        <td>
-          <a th:href="@{/noticeboard/{tableNo}(tableNo=${board.tableNo})}">
-            [[${board.title}]]
-          </a>
-        </td>
-        <td>[[${board.userId}]]</td>
-        <td>[[${board.date}]]</td>
-      </tr>
-      <!-- 게시물 데이터가 없는경우 -->
-      <tr th:if="${boardList.size() == 0}">
-        <td colspan="4">게시물이 존재하지 않습니다.</td>
-      </tr>
-      </tbody>
-    </table>
-    <a href="writeAnnouncemnet.jsp" class="btn btn-primary pull-right">글쓰기</a>
-  </div>
-  <div style="margin-top: 40px">
-    <nav class="navbar navbar-light bg-light">
-      <div class="container-fluid">
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
-          <div style="width:80px;float: right;">
-          <button class="btn btn-primary me-md-2"  type="submit" style=" margin-top: 10px">Search</button>
-          </div>
-        </form>
-
-
-
+<nav>
+    <div class="card text-center">
+      <div class="card-header">
+        <h1 style="font-size: 40px">[[${board.title}]]</h1>
       </div>
-    </nav>
+      <div class="card-body">
+        <p class="card-text" style="font-size: 20px">[[${board.content}]]</p>
+      </div>
+      <div class="card-footer text-muted">
+        [[${board.userId}]]<br>
+        [[${board.date}]]
+      </div>
+    </div>
+
+
+  <div class="container my-1">
+    <div class="row">
+      <table class="table">
+        <tbody>
+        <tr th:each="comment: ${commentList}">
+          <td>
+            <pre>[[${comment.content}]]<div style="font-size: 5px; float: right">([[${comment.userId}]]  [[${comment.date}]])</div><div class="text-right"><span><button type="submit" name="submit" value="update">수정</button></span><span><button type="submit" name="submit" value="delete">삭제</button></span></div></pre>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <form class="d-flex">
+        <input class="form-control me-2" type="text" placeholder="댓글" aria-label="Search" name="query">
+        <div style="width:80px;float: right;">
+          <button class="btn btn-primary me-md-2"  type="submit" style=" margin-top: 10px">입력</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+
+    <div class="container">
+      <a href="/noticeboard" class="btn btn-primary">목록</a>
+
+      <a th:if="${board.userId}" th:href="@{/noticeBoard/edit/{tableNo}(tableNo=${board.tableNo})}"
+         class="btn btn-default">편집</a>
+
+      <a th:href="@{/noticeBoard/delete/{tableNo}(tableNo=${board.tableNo})}"
+         class="btn  btn-danger">삭제</a>
+    </div>
+</nav>
+
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="/js/bootstrap.js"></script>
+<script src="../js/bootstrap.js"></script>
 </body>
 </html>

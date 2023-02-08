@@ -3,8 +3,8 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width", initial-scale="1" >  <!-- 반응형 웹에 사용하는 메타태그 -->
-  <link rel="stylesheet" href="css/bootstrap.css"> <!-- 참조  -->
-  <title>공지사항 게시판 </title>
+  <link rel="stylesheet" href="../css/bootstrap.css"> <!-- 참조  -->
+  <title>JSP 게시판 웹 사이트</title>
 </head>
 <body>
 
@@ -21,7 +21,7 @@
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <li><a href="noticeBoard">공지사항</a></li>
+      <li><a href="announcemnetBoard.jsp">공지사항</a></li>
       <li><a href="freeBoard.jsp">자유게시판</a></li>
       <li><a href="faqBoard.jsp">FAQ</a></li>
     </ul>
@@ -51,59 +51,30 @@
 
   </div>
 </nav>
-
-
-
 <div class="container">
   <div class="row">
-    <table class="table table-striped" style="text-align:center; border:1px solid #dddddd">
-      <thead>
-      <tr>
-        <th style="background-color:#eeeeee; text-align:center;">번호</th>
-        <th style="background-color:#eeeeee; text-align:center;">제목</th>
-        <th style="background-color:#eeeeee; text-align:center;">작성자</th>
-        <th style="background-color:#eeeeee; text-align:center;">작성일</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- 게시물 목록을 반복 -->
-      <tr th:each="board : ${boardList}">
-        <td>[[${board.tableNo}]]</td>
-        <td>
-          <a th:href="@{/noticeboard/{tableNo}(tableNo=${board.tableNo})}">
-            [[${board.title}]]
-          </a>
-        </td>
-        <td>[[${board.userId}]]</td>
-        <td>[[${board.date}]]</td>
-      </tr>
-      <!-- 게시물 데이터가 없는경우 -->
-      <tr th:if="${boardList.size() == 0}">
-        <td colspan="4">게시물이 존재하지 않습니다.</td>
-      </tr>
-      </tbody>
-    </table>
-    <a href="writeAnnouncemnet.jsp" class="btn btn-primary pull-right">글쓰기</a>
-  </div>
-  <div style="margin-top: 40px">
-    <nav class="navbar navbar-light bg-light">
-      <div class="container-fluid">
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
-          <div style="width:80px;float: right;">
-          <button class="btn btn-primary me-md-2"  type="submit" style=" margin-top: 10px">Search</button>
-          </div>
-        </form>
+    <form method="post" action="writeAction.jsp">
+      <table class="table table-striped" style="text-align:center; border:1px solid #dddddd">
+        <thead>
+        <tr>
+          <th colspan="2" style="background-color:#eeeeee; text-align:left;">공지사항</th>
 
-
-
-      </div>
-    </nav>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><input type="text" class="form-control" placeholder="제목을 입력하세요."  name="bbsTitle" maxlength="50" ></td>
+        </tr>
+        <tr>
+          <td><textarea class="form-control" placeholder="문의 내용을 입력하세요."  name="bbsContent" maxlength="2048" style="height:350px" ></textarea></td>
+        </tr>
+        </tbody>
+      </table>
+      <input type="submit"  class="btn btn-primary pull-right" value="저장">
+    </form>
   </div>
 </div>
-
-
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="/js/bootstrap.js"></script>
+<script src="../js/bootstrap.js"></script>
 </body>
 </html>

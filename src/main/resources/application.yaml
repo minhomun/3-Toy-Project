@@ -19,10 +19,14 @@ spring:
       location: /fileupload
       max-request-size: 50MB
 
+  web:
+    resources:
+      static-locations: classpath:/static/
+
 # mybatis 설정
 mybatis:
   mapper-locations:
-    - classpath:config/mapper/NoticeBoard.xml
+    - classpath:config/mapper/**.xml
   configuration:
     # snake_case -> camelCase ??
     map-underscore-to-camel-case: true
