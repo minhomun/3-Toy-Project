@@ -4,6 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width", initial-scale="1" >  <!-- 반응형 웹에 사용하는 메타태그 -->
   <link rel="stylesheet" href="../css/bootstrap.css"> <!-- 참조  -->
+
   <title>JSP 게시판 웹 사이트</title>
 </head>
 <body>
@@ -48,32 +49,32 @@
         </ul>
       </li>
     </ul>
-
   </div>
 </nav>
+
 <div class="container">
   <div class="row">
-    <form method="post" action="writeAction.jsp">
+    <form th:action="${board == null ? '/noticeboard/save' : '/noticeboard/update'}" method="post">
       <table class="table table-striped" style="text-align:center; border:1px solid #dddddd">
         <thead>
         <tr>
           <th colspan="2" style="background-color:#eeeeee; text-align:left;">공지사항</th>
-
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td><input type="text" class="form-control" placeholder="제목을 입력하세요."  name="bbsTitle" maxlength="50" ></td>
+          <td><input type="text" class="form-control" placeholder="제목을 입력하세요."  name="title" maxlength="50" th:value="${board?.title}"></td>
         </tr>
         <tr>
-          <td><textarea class="form-control" placeholder="문의 내용을 입력하세요."  name="bbsContent" maxlength="2048" style="height:350px" ></textarea></td>
+          <td><textarea class="form-control" placeholder="문의 내용을 입력하세요."  name="content" maxlength="2048" style="height:350px" >[[${board?.content}]]</textarea></td>
         </tr>
         </tbody>
       </table>
-      <input type="submit"  class="btn btn-primary pull-right" value="저장">
+      <button type="submit" class="btn btn-primary">등록하기</button>
     </form>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="../js/bootstrap.js"></script>
 </body>

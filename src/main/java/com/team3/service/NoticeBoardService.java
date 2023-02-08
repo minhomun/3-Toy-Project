@@ -1,6 +1,7 @@
 package com.team3.service;
 
 import com.team3.domain.NoticeBoard;
+import com.team3.dto.NoticeBoardDTO;
 import com.team3.mapper.NoticeBoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class NoticeBoardService {
 
     public NoticeBoard selectNoticeBoard(BigInteger tableNo) {
         return noticeBoardMapper.selectNoticeBoard(tableNo);
+    }
+
+    public void insertNoticeBoard(NoticeBoardDTO noticeBoardDTO) {
+        noticeBoardMapper.insertNoticeBoard(noticeBoardDTO);
     }
 
 

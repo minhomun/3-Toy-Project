@@ -33,4 +33,16 @@
         WHERE TABLE_NO = #{tableNo}
     </select>
 
+    <insert id="insertNoticeBoard" parameterType="com.team3.domain.NoticeBoard">
+            INSERT INTO notice_table
+            VALUES (
+                        NULL,
+                        #{userNo},
+                        #{userId},
+                        #{title},
+                        #{content},
+                        Now()
+                   )
+    </insert>
+
 </mapper>
