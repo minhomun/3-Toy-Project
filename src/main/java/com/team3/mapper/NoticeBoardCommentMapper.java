@@ -11,6 +11,7 @@ public interface NoticeBoardCommentMapper {
 
     public List<NoticeBoardComment> selectNoticeBoardCommentList(BigInteger tableNo);
 
+    public NoticeBoardComment selectComment(BigInteger commentNo);
     public void save(NoticeBoardComment comment);
 
     public void deleteComment(BigInteger commentNo);

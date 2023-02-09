@@ -18,6 +18,10 @@ public class NoticeBoardCommentService {
         return noticeBoardCommentMapper.selectNoticeBoardCommentList(tableNo);
     }
 
+    public NoticeBoardComment selectComment(BigInteger commentNo) {
+        return noticeBoardCommentMapper.selectComment(commentNo);
+    }
+
     public void save(NoticeBoardComment comment) {
         noticeBoardCommentMapper.save(comment);
     }

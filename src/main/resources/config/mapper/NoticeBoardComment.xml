@@ -8,6 +8,7 @@
     <select id="selectNoticeBoardCommentList" parameterType="BigInteger"
             resultType="com.team3.domain.NoticeBoardComment">
         SELECT
+            COMMENT_NO,
             USER_ID,
             CONTENT,
             DATE
@@ -15,6 +16,14 @@
             notice_table_comment
         WHERE TABLE_NO = #{tableNo}
         ORDER BY COMMENT_NO DESC
+    </select>
+
+    <select id="selectComment" parameterType="BigInteger" resultType="com.team3.domain.NoticeBoardComment">
+        SELECT
+            *
+        FROM
+            notice_table_comment
+        WHERE COMMENT_NO = #{commentNo}
     </select>
 
     <insert id="save" parameterType="com.team3.domain.NoticeBoardComment">

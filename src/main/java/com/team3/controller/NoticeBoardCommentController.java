@@ -56,17 +56,17 @@ public class NoticeBoardCommentController {
         return "redirect:/noticeboard/" + tableNo;
     }
 
-    @GetMapping("/delete/{tableNo}/{commentNo}")
+    @PostMapping("/delete")
     public String delete(Model model,
-                         @PathVariable BigInteger commentNo,
-                         @PathVariable BigInteger tableNo,
+                         @RequestParam BigInteger tableNo,
+                         @RequestParam BigInteger commentNo,
                          HttpSession httpSession) {
 
         // 본인만 삭제 가능
 //        String userId = (String) httpSession.getAttribute("userId");
-//        if (userId != noticeBoardComment.selectComment.getUserId()) {
-//            model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
-//            model.addAttribute("url", String.valueOf(userId));
+//        if (userId != noticeBoardCommentService.selectComment(commentNo).getUserId()) {
+//            model.addAttribute("message", "본인만 삭제 가능합니다.");
+//            model.addAttribute("url", "/noticeboard/" + tableNo);
 //            return "/noticeBoard/redirect";
 //        }
 
