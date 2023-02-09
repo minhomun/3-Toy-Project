@@ -1,5 +1,5 @@
 spring:
-  # DataBase ???? set
+  # DataBase 접속정보 설정
   datasource:
     username: root
     password: 1234
@@ -23,7 +23,7 @@ spring:
     resources:
       static-locations: classpath:/static/
 
-# mybatis ??
+# mybatis 설정
 mybatis:
   mapper-locations:
     - classpath:config/mapper/**.xml
