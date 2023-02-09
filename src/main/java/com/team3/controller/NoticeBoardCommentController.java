@@ -25,10 +25,6 @@ public class NoticeBoardCommentController {
                        @RequestParam String content,
                        @RequestParam BigInteger tableNo) {
 
-        // session 부분 일단 주석 처리
-
-//        String userId = (String) httpSession.getAttribute("userId");
-//        BigInteger userNo = (BigInteger) httpSession.getAttribute("userNO");
 
         if (content.length() == 0 || content.equals("") || content == null) {
             model.addAttribute("message", "댓글을 입력해 주세요.");
@@ -40,6 +36,10 @@ public class NoticeBoardCommentController {
             model.addAttribute("url", "/noticeboard/" + tableNo);
             return "/noticeBoard/redirect";
         }
+        // session 부분 일단 주석 처리
+
+//        String userId = (String) httpSession.getAttribute("userId");
+//        BigInteger userNo = (BigInteger) httpSession.getAttribute("userNO");
 
         String userId = "normal";
         BigInteger userNo = BigInteger.valueOf(2);
@@ -53,7 +53,10 @@ public class NoticeBoardCommentController {
 
         noticeBoardCommentService.save(comment);
 
-        return "redirect:/noticeboard/" + tableNo;
+        model.addAttribute("message", "댓글이 추가되었습니다.");
+        model.addAttribute("url", "/noticeboard/" + tableNo);
+        return "/noticeBoard/redirect";
+
     }
 
     @PostMapping("/delete")
