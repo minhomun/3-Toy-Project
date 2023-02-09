@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">-->
+
+<!--</beans>-->
+
+<!-- SQL 끝에 세미콜론 넣으면 안됨 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team3.dao.FreeBoardDao">
+    <select id="list" resultType="com.team3.dto.FreeBoardDto">
+        select * from TABLE order by Data desc
+    </select>
+
+    <insert id="write">
+        insert into board (Table_No,User_No,User_Id,TITLE,CONTENT,DATE)
+            values (board_seq.nextval, #{ param1},#{ param2},#{ param3},#{ param4}, sysdate)
+
+    </insert>
+    
+    <select id="viewDto" resultType="com.team3.dto.FreeBoardDto">
+        select * from board where Table_no=#{ param1 }
+    </select>
+
+    <update id="updateDto">
+        update board set User_Id=#{param2}, TITLE={ param3 }, CONTENT=# {param4} where Table_No=#{param1}
+    </update>
+
+    <delete id="deleteDto">
+        delete from board where Table_No=#{param1}
+    </delete>
+</mapper>
