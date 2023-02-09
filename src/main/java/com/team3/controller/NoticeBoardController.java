@@ -88,22 +88,22 @@ public class NoticeBoardController {
 
         log.info("작동하나요?");
 
-        if (title.length() == 0 || title.equals("")) {
+        if (title.length() == 0 || title.equals("") || title == null) {
             model.addAttribute("message", "제목을 입력해 주세요.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
         }
-        if (title.length() < 2 || title.length() > 50) {
+        if (title.length() < 2 || title.length() > 50 || title == null) {
             model.addAttribute("message", "제목은 2~50자 사이만 작성할 수 있습니다.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
         }
-        if (content.length() == 0 || content.equals("")) {
+        if (content.length() == 0 || content.equals("") || content == null) {
             model.addAttribute("message", "내용을 입력해 주세요.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
         }
-        if (content.length() < 10 || content.length() > 500) {
+        if (content.length() < 10 || content.length() > 500 || content == null) {
             model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
@@ -133,8 +133,10 @@ public class NoticeBoardController {
         noticeBoardService.insertNoticeBoard(noticeBoardDTO);
 
         log.info("작동하나요?4");
+        model.addAttribute("message", "저장되었습니다.");
+        model.addAttribute("url", "/noticeboard");
 
-        return "redirect:/noticeboard";
+        return "/noticeBoard/redirect";
     }
 
     /**
@@ -179,22 +181,22 @@ public class NoticeBoardController {
 
         log.info("작동하나요?");
 
-        if (title.length() == 0 || title.equals("")) {
+        if (title.length() == 0 || title.equals("") || title == null) {
             model.addAttribute("message", "제목을 입력해 주세요.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
         }
-        if (title.length() < 2 || title.length() > 50) {
+        if (title.length() < 2 || title.length() > 50 || title == null) {
             model.addAttribute("message", "제목은 2~50자 사이만 작성할 수 있습니다.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
         }
-        if (content.length() == 0 || content.equals("")) {
+        if (content.length() == 0 || content.equals("") || content == null) {
             model.addAttribute("message", "내용을 입력해 주세요.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
         }
-        if (content.length() < 10 || content.length() > 500) {
+        if (content.length() < 10 || content.length() > 500 || content == null) {
             model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
             model.addAttribute("url", "write");
             return "/noticeBoard/redirect";
@@ -225,8 +227,11 @@ public class NoticeBoardController {
         noticeBoardService.updateNoticeBoard(noticeBoard);
 
         log.info("작동하나요?4");
+        model.addAttribute("message", "수정되었습니다.");
+        model.addAttribute("url", "/noticeboard/" + tableNo);
 
-        return "redirect:/noticeboard/" + tableNo;
+
+        return "/noticeBoard/redirect";
     }
 
     /**
@@ -236,14 +241,14 @@ public class NoticeBoardController {
      * @param httpSession
      * @return
      */
-    @GetMapping("/delete/{tableNo}")
+    @PostMapping("/delete")
     public String delete(Model model,
-                         @PathVariable BigInteger tableNo,
+                         @RequestParam BigInteger tableNo,
                          HttpSession httpSession) {
 
-        // 본인만 삭제 가능
+//         본인만 삭제 가능
 //        String userId = (String) httpSession.getAttribute("userId");
-//        if (userId != noticeBoard.getUserId()) {
+//        if (userId != noticeBoardService.selectNoticeBoard(tableNo).getUserId()) {
 //            model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
 //            model.addAttribute("url", String.valueOf(userId));
 //            return "/noticeBoard/redirect";

@@ -21,4 +21,8 @@ public class NoticeBoardCommentService {
     public void save(NoticeBoardComment comment) {
         noticeBoardCommentMapper.save(comment);
     }
+
+    public void deleteComment(BigInteger commentNo) {
+        noticeBoardCommentMapper.deleteComment(commentNo);
+    }
 }

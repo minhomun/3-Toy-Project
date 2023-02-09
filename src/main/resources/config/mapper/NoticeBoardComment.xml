@@ -30,5 +30,9 @@
             )
     </insert>
 
+    <delete id="deleteComment" parameterType="BigInteger">
+        DELETE FROM notice_table_comment
+        WHERE COMMENT_NO = #{commentNo}
+    </delete>
 
 </mapper>
