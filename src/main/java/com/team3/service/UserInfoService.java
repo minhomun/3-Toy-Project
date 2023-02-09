@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -34,6 +36,10 @@ public class UserInfoService implements UserDetailsService {
         int test = userInfoMapper.insertUserInfo(userInfo);
         System.out.println("test = " + test);
         return test;
+    }
+
+    public BigInteger selectUserNo(String userId) {
+        return userInfoMapper.selectUserNo(userId);
     }
 
     @Override
