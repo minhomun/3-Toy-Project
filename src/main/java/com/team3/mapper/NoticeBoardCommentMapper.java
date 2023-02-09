@@ -15,4 +15,6 @@ public interface NoticeBoardCommentMapper {
     public void save(NoticeBoardComment comment);
 
     public void deleteComment(BigInteger commentNo);
+
+    public void deleteAllComment(BigInteger tableNo);
 }

@@ -29,4 +29,8 @@ public class NoticeBoardCommentService {
     public void deleteComment(BigInteger commentNo) {
         noticeBoardCommentMapper.deleteComment(commentNo);
     }
+
+    public void deleteAllComment(BigInteger tableNo) {
+        noticeBoardCommentMapper.deleteAllComment(tableNo);
+    }
 }

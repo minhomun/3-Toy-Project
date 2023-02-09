@@ -44,4 +44,9 @@
         WHERE COMMENT_NO = #{commentNo}
     </delete>
 
+    <delete id="deleteAllComment" parameterType="BigInteger">
+        DELETE FROM notice_table_comment
+        WHERE TABLE_NO = #{talbeNo}
+    </delete>
+
 </mapper>

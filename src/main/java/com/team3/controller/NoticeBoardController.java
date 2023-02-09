@@ -257,6 +257,8 @@ public class NoticeBoardController {
         log.info("되나?1");
         noticeBoardService.deleteNoticeBoard(tableNo);
 
+        noticeBoardCommentService.deleteAllComment(tableNo);
+
         log.info("되나?2");
         model.addAttribute("message", "삭제 되었습니다.");
         model.addAttribute("url", "/noticeboard");
