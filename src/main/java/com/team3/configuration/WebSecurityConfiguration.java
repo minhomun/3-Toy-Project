@@ -31,7 +31,6 @@ public class WebSecurityConfiguration {
                         .permitAll()
                         .mvcMatchers(
                                 HttpMethod.GET,
-                                "/**",
                                 "/",
                                 "/login",
                                 "/registerForm"
@@ -39,7 +38,6 @@ public class WebSecurityConfiguration {
                         .permitAll()
                         .mvcMatchers(
                                 HttpMethod.POST,
-                                "/**",
                                 "/login",
                                 "/checkUserInfo",
                                 "/idCheck",

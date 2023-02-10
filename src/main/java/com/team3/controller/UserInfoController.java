@@ -78,6 +78,6 @@ public class UserInfoController {
     public String notice(Model model, Authentication authentication){
         SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
         model.addAttribute("user", securityUser);
-        return "/notice";
+        return "/login_register/notice";
     }
 }
