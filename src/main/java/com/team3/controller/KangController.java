@@ -1,7 +1,8 @@
-package com.team3;
+package com.team3.controller;
 
 import com.team3.dao.FreeBoardDao;
 import com.team3.dto.FreeBoardDto;
+import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ public class KangController {
 
     @Autowired
     FreeBoardDao boardDao;
+    private Session request;
 
     @RequestMapping("/")
 //    @ResponseBody
@@ -51,14 +53,14 @@ public class KangController {
             System.out.println("글쓰기 성공");
             //request.getSession().stAttribute("alert_message","글쓰기 성공");
             //   return "redirect:freeBoard"; //freeBoard으로 리다이렉트 됨.
-            return "<script>alert('글쓰기 성공!'); location.href='freeForm';</script>";
+            return "<script>alert('글쓰기 성공!'); location.href='freeBoard';</script>";
         } else {
             System.out.println("글쓰기 실패");
             //request.getSession().stAttribute("alert_message","글쓰기 실패");
             // return "redirect:writeFreeBoard"; //writeFreeBoard으로 리다이렉트 됨.
-            return "<script>alert('글쓰기 실패!'); location.href='writefreeForm'</script>";
+            return "<script>alert('글쓰기 실패!'); location.href='writefreeBoard'</script>";
         }
-        return "redirect:freeboard"; //"freeboard.jsp" 리다이렉트 됨.
+        //"freeBoard.jsp" 리다이렉트 됨.
     }
 
     @RequestMapping("/contentForm")
@@ -73,15 +75,16 @@ public class KangController {
     @RequestMapping("/updateAction")
     @ResponseBody
     public String updateAction(@RequestParam("Table_No") String Table_No,
+                               @RequestParam("TITLE") String user_id,
                                @RequestParam("TITLE") String TITLE,
                                @RequestParam("CONTENT") String CONTENT) {
 
-        int result FreeBoardDao.updateDto(Table_No, TITLE, CONTENT);
+        int result = FreeBoardDao.updateDto(Table_No,user_id, TITLE, CONTENT);
         if (result == 1) {
             System.out.println("글수정 성공");
-            //request.getSession().stAttribute("alert_message","글수정 성공");
+//            request.getSession().stAttribute("alert_message","글수정 성공");
             //   return "redirect:freeBoard"; //freeBoard으로 리다이렉트 됨.
-            return "<script>alert('글수정 성공!'); location.href='/freeForm';</script>";
+            return "<script>alert('글수정 성공!'); location.href='/freeBoard';</script>";
         } else {
             System.out.println("글수정 실패");
             //request.getSession().stAttribute("alert_message","글수정 실패");
@@ -89,24 +92,26 @@ public class KangController {
             return "<script>alert('글수정 실패!'); location.href='/contentForm?Table_No=" + Table_No + "';</script>";
 
         }
-
-        @RequestMapping("/deleteAction")
-        @ResponseBody
-        public String deleteAction (@RequestParam("Table_No") String Table_No){
+//        return "redirect:freeBoard";
+    }
 
 
-        }
+
+
+    @RequestMapping("/deleteAction")
+    @ResponseBody
+    public String deleteAction (@RequestParam("Table_No") String Table_No) {
+
         int result = FreeBoardDao.deleteDto(Table_No);
         if (result == 1) {
             System.out.println("글삭제 성공");
-//            request.getSession().stAttribute("alert_message", "글삭제 성공");
-//            return "redirect:freeBoard"; //freeBoard으로 리다이렉트 됨.
-            return "<script>alert('글삭제 성공!'); location.href='/freeForm';</script>";
+            request.getSession();//stAttribute("alert_message", "글삭제 성공");
+            return "redirect:freeBoard"; //freeBoard으로 리다이렉트 됨.
+
         } else {
             System.out.println("글삭제 실패");
-//            request.getSession().stAttribute("alert_message", "글삭제 실패");
-//            return "redirect:writeFreeBoard"; //writeFreeBoard으로 리다이렉트 됨.
-            return "<script>alert('글삭제 실패!'); location.href='/contentForm?Table_No=" + Table_No + "';</script>";
+            request.getSession();//stAttribute("alert_message", "글삭제 실패");
+            return "redirect:writeFreeBoard"; //writeFreeBoard으로 리다이렉트 됨.
 
         }
 //    ?Table_No=${ dto.Table_No }

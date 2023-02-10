@@ -9,12 +9,24 @@ import java.util.List;
 @Mapper
 public interface FreeBoardDao {
     public List<FreeBoardDto> list();
-    public int write(String user_id, String title, String content) ;
 
-    public FreeBoardDto viewDto(String Table_no);
+    public static int write(String user_id, String title, String content) {
+        return 0;
+    }
 
-    };
+    public static FreeBoardDto viewDto(String Table_no) {
+        return null;
+    }
 
+    public static int updateDto(String Table_No, String user_id, String title, String content) {
+        return 0;
+    }
 
-
+    public static int deleteDto(String Table_No) {
+        return 0;
+    }
 }
+
+
+
+
