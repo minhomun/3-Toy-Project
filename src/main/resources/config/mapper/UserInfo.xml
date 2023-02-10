@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team3.mapper.UserInfoMapper">
+    <resultMap type="com.team3.domain.UserInfoDto" id="userInfo">
+        <result property="id" column="USER_ID"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="name" column="NAME"/>
+        <result property="phoneNumber" column="PHONENUMBER"/>
+    </resultMap>
+
+    <!-- 게시물 상세 쿼리 1:1 데이터 조회 -->
+    <select id="checkUserInfo" parameterType="com.team3.domain.UserInfoDto" resultType="int">
+        SELECT EXISTS(
+                       SELECT 1
+                       FROM USER_INFO
+                       WHERE USER_ID = #{id}
+                         AND PASSWORD = #{password}
+                   )
+
+    </select>
+
+    <select id="selectUser" parameterType="String" resultType="com.team3.domain.SecurityUser">
+        SELECT USER_ID as id, PASSWORD, NAME, PHONENUMBER, ROLE
+        FROM USER_INFO
+        WHERE USER_ID = #{id}
+    </select>
+
+    <select id="idCheck" parameterType="String" resultType="int">
+        SELECT count(USER_ID)
+        FROM USER_INFO
+        WHERE USER_ID = #{id}
+    </select>
+
+    <insert id="insertUserInfo" parameterType="com.team3.domain.UserInfoDto">
+        INSERT INTO USER_INFO
+            (USER_ID, PASSWORD, NAME, PHONENUMBER, ROLE)
+        VALUES (#{id}, #{password}, #{name}, #{phoneNumber}, #{role})
+    </insert>
+
+    <select id="selectUserNo" parameterType="String" resultType="BigInteger">
+        SELECT USER_NO
+        FROM user_info
+        WHERE USER_ID = #{userId}
+    </select>
+</mapper>

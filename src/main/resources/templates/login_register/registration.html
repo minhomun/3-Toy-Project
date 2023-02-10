@@ -1,0 +1,160 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" , initial-scale="1">
+    <!-- 반응형 웹에 사용하는 메타태그 -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script>
+        function idCheck() {
+            var regId = /[a-zA-Z0-9]{6,10}/;
+            var testStr = $("#id").val();
+            if (!regId.test(testStr)) {
+                alert("아이디는 6~10자의 영어와 숫자만으로 구성해주세요.");
+            } else {
+                $.ajax({
+                    url: "idCheck",
+                    type: "post",
+                    dataType: "json",
+                    data: {"id": $("#id").val()},
+                    success: function (data) {
+                        if (data == 1) {
+                            alert("중복된 아이디입니다.");
+                            $("#idChk").attr("value", "N");
+                        } else {
+                            $("#idChk").attr("value", "Y");
+                            alert("사용가능한 아이디입니다.");
+                        }
+                    }
+                })
+            }
+
+        }
+
+        function registerUser() {
+            if ($("#idChk").val() == 'N') {
+                alert("아이디 중복체크를 먼저 진행해주세요.");
+            }
+            else if(!$("#chkBox").is(':checked')){
+                alert("개인 정보 이용 약관에 동의해주세요.");
+            }
+            else {
+                var queryString = $("form[name=registerForm]").serialize();
+                console.log(queryString);
+                $.ajax({
+                    url: "registration",
+                    type: "post",
+                    dataType: "text",
+                    data: queryString,
+                    success: function (data) {
+                        console.log(data);
+                        if (data == "passwordError") {
+                            alert("비밀번호를 확인해주세요.");
+                        } else if (data == "nameError") {
+                            alert("이름을 확인해주세요.");
+                        } else if (data == "phoneNumberError") {
+                            alert("휴대폰 번호를 확인해주세요.");
+                        } else {
+                            alert("회원가입이 완료되었습니다.");
+                            location.href = 'login';
+                        }
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                })
+            }
+        }
+    </script>
+    <!-- 참조  -->
+    <title>TOYPROJECT</title>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="navbar-header">
+        <!-- 홈페이지의 로고 -->
+        <button type="button" class="navbar-toggle collapsed"
+                data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                aria-expand="false">
+            <span class="icon-bar"></span>
+            <!-- 줄였을때 옆에 짝대기 -->
+            <span class="icon-bar"></span> <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="main.jsp">TOYPROJECT</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="/noticeboard">공지사항</a></li>
+            <li><a href="">자유게시판</a></li>
+            <li><a href="/board">FAQ</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle"
+                   data-toggle="dropdown" role="button"
+                   aria-haspopup="true"
+                   aria-expanded="false">접속하기<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li class="active"><a href="login">로그인</a></li>
+                    <li><a href="/logout">로그아웃</a></li>
+                    <li><a href="registerForm">회원가입</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <div class="jumbotron" style="padding-top: 20px;">
+            <form name="registerForm" method="post" action="registration">
+                <h3 style="text-align: center;">회원가입</h3>
+                <h5 style="text-align: left;">아이디</h5>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="id" placeholder="아이디를 입력해주세요(6~10자)"
+                           name="id" maxlength='10'>
+                    <button type="button" id="idChk" onclick="idCheck(); return false;" value="N">중복확인</button>
+                </div>
+                <h5 style="text-align: left;">비밀번호</h5>
+                <div class="form-group">
+                    <input type="password" class="form-control"
+                           placeholder="비밀번호를 입력해주세요(8~15자)" name="password"
+                           maxlength='20'>
+                </div>
+                <h5 style="text-align: left;">비밀번호 확인</h5>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="비밀번호를 입력해주세요(8~15자)"
+                           name="passwordCheck" maxlength='20'>
+                </div>
+                <h5 style="text-align: left;">이름</h5>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="이름을 입력해주세요(최대 10자)"
+                           name="name" maxlength='20'>
+                </div>
+                <h5 style="text-align: left;">휴대폰</h5>
+                <div class="form-group">
+                    <input type="text"
+                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                           class="form-control" placeholder="'-'없이 입력해주세요(10~11자)"
+                           name="phoneNumber" maxlength='20'>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="chkBox">
+                    <label class="form-check-label" for="chkBox">
+                        개인 정보 이용 약관 (필수)
+                    </label>
+                </div>
+                <button type="button" class="btn btn-primary form-control"
+                        onclick="registerUser(); return false;">회원가입
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-4"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="js/bootstrap.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team3.mapper.NoticeBoardMapper">
+
+    <select id="selectNoticeBoardList" parameterType="String"
+            resultType="com.team3.domain.NoticeBoard">
+        SELECT
+            TABLE_NO,
+            TITLE,
+            USER_ID,
+            DATE
+        FROM
+            notice_table
+        <if test="query != null and query.length() > 0">
+            WHERE TITLE LIKE CONCAT('%', CONCAT(#{query}, '%'))
+        </if>
+        ORDER BY TABLE_NO DESC
+    </select>
+
+    <select id="selectNoticeBoard" parameterType="BigInteger"
+            resultType="com.team3.domain.NoticeBoard">
+        SELECT
+            TABLE_NO,
+            TITLE,
+            CONTENT,
+            USER_ID,
+            DATE
+        FROM
+            notice_table
+        WHERE TABLE_NO = #{tableNo}
+    </select>
+
+    <insert id="insertNoticeBoard" parameterType="com.team3.domain.NoticeBoard">
+            INSERT INTO notice_table
+            VALUES (
+                        NULL,
+                        #{userNo},
+                        #{userId},
+                        #{title},
+                        #{content},
+                        Now()
+                   )
+    </insert>
+
+    <update id="updateNoticeBoard" parameterType="com.team3.domain.NoticeBoard">
+        UPDATE notice_table
+        SET
+            TITLE = #{title},
+            CONTENT = #{content}
+        WHERE TABLE_NO = #{tableNo}
+    </update>
+
+    <delete id="deleteNoticeBoard" parameterType="BigInteger">
+        DELETE FROM notice_table
+        WHERE TABLE_NO = #{tableNo}
+    </delete>
+
+    <sql id="search">
+        <if test="searchType != null">
+            <if test="searchType=='t'.toString()">
+                and title like CONCAT('%',#{keyword},'%')
+            </if>
+
+            <if test="searchType=='c'.toString()">
+                and content like CONCAT('%',#{keyword},'%')
+            </if>
+
+            <if test="searchType=='w'.toString()">
+                and USER_ID like CONCAT('%',#{keyword},'%')
+            </if>
+
+
+        </if>
+    </sql>
+
+    <select id="selectNoticeBoardListWithPaging" parameterType="com.team3.domain.Criteria"
+            resultType="com.team3.domain.NoticeBoard">
+
+        WITH cte AS (
+            SELECT
+                ROW_NUMBER() OVER (ORDER BY TABLE_NO DESC) as R,
+                    TABLE_NO,
+                TITLE,
+                CONTENT,
+                USER_ID,
+                DATE
+        FROM notice_table
+            )
+        SELECT
+            TABLE_NO,
+            TITLE,
+            CONTENT,
+            USER_ID,
+            DATE
+        FROM cte
+        WHERE R BETWEEN (#{pageNum} - 1) * #{amount} + 1 AND #{pageNum} * #{amount}
+        <if test="keyword != null and keyword.length() > 0">
+            AND TITLE LIKE CONCAT('%', CONCAT(#{keyword}, '%'))
+        </if>
+    </select>
+
+    <select id="getTotal" resultType="Integer">
+        select count(*)
+        from notice_table
+    </select>
+
+</mapper>
