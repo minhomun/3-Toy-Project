@@ -1,10 +1,8 @@
 package com.team3.controller;
 
-import com.team3.domain.Role;
 import com.team3.domain.SecurityUser;
 import com.team3.domain.UserInfoDto;
 import com.team3.service.UserInfoService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 
@@ -28,7 +24,7 @@ public class UserInfoController {
     public String loginPage(Model model) {
         System.out.println("/login");
         model.addAttribute("user", new LoginRequest());
-        return "login";
+        return "login_register/login";
     }
     @PostMapping("/loginProcess")
     public String checkUserInfo(Model model, UserInfoDto userInfo){
@@ -39,18 +35,18 @@ public class UserInfoController {
             System.out.println("성공!");
             model.addAttribute("msg", "로그인을 성공하였습니다.");
 
-            return "notice";
+            return "redirect:noticeBoard";
         }
         else{
             System.out.println("실패!");
             model.addAttribute("msg", "아이디와 비밀번호를 확인해주세요.");
-            return "login";
+            return "login_register/login";
         }
     }
 
     @RequestMapping("/registerForm")
     public String registerForm(){
-        return "registration";
+        return "login_register/registration";
     }
 
     @RequestMapping("idCheck")

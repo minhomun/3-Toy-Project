@@ -23,7 +23,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         System.out.println("Hello");
-        redirectStrategy.sendRedirect(request, response,"/notice");
+        redirectStrategy.sendRedirect(request, response,"/noticeboard");
         request.getSession().setAttribute("msg", "로그인에 성공하였습니다.");
     }
 }
