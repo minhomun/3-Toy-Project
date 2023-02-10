@@ -45,3 +45,6 @@ security:
   login-processing-url: "/login"
   login-page: "/login"
   authentication-success-handler-ref: "loginSuccessHandler"
+
+  server:
+    port: 8081

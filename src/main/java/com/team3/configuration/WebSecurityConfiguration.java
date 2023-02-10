@@ -27,6 +27,7 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+
                         .permitAll()
                         .mvcMatchers(
                                 HttpMethod.GET,
@@ -50,7 +51,7 @@ public class WebSecurityConfiguration {
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("id")
-                .defaultSuccessUrl("/notice")
+                .defaultSuccessUrl("/noticeBoard")
                 .successHandler(successHandler)
                 .and()
                 .logout()
