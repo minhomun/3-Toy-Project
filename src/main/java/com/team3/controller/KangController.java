@@ -2,6 +2,7 @@ package com.team3.controller;
 
 import com.team3.dao.FreeBoardDao;
 import com.team3.dto.FreeBoardDto;
+import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
+
 public class KangController {
 
-    @Autowired
-    FreeBoardDao boardDao;
+
+    private final FreeBoardDao boardDao;
     private Session request;
 
     @RequestMapping("/")

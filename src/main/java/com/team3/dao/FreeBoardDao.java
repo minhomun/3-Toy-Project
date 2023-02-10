@@ -26,7 +26,3 @@ public interface FreeBoardDao {
         return 0;
     }
 }
-
-
-
-
