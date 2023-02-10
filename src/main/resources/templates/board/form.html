@@ -8,6 +8,15 @@
 <body>
 <form th:action="${board == null ? '/board/save' : '/board/update'}" method="post">
 
+  <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" checked>
+  <label class="btn btn-secondary" for="option1">결제/취소</label>
+
+  <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
+  <label class="btn btn-secondary" for="option2">이용문의</label>
+
+  <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off">
+  <label class="btn btn-secondary" for="option2">기타문의</label>
+
   <input type="hidden" name="boardSeq"
          th:if="${board != null}"
          th:value="${board.boardSeq}" />

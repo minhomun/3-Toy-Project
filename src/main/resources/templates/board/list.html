@@ -13,62 +13,57 @@
 
 <body>
 
-<nav class="navbar navbar-default">
-    <div class="navbar-header"> <!-- 홈페이지의 로고 -->
-        <button type="button" class="navbar-toggle collapsed"
-                data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-                aria-expand="false">
-            <span class="icon-bar"></span> <!-- 줄였을때 옆에 짝대기 -->
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Toyproject</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href=#>TOYPROJECT</a>
-    </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-            <li><a href="announcemnetBoard.jsp">공지사항</a></li>
-            <li><a href="freeBoard.jsp">자유게시판</a></li>
-            <li><a href="faqBoard.jsp">FAQ</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle"
-                   data-toggle="dropdown" role="button"
-                   aria-haspopup="true"
-                   aria-expanded="false">접속하기<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li class="active"><a href="login.jsp">로그인</a></li>
-                    <li><a href="registration.html">회원가입</a></li>
-                </ul>
-            </li>
-        </ul>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">공지사항</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">자유게시판</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=/board>FAQ</a>
+                </li>
+
+            </ul>
+        </div>
     </div>
 </nav>
 
 <table class="table">
     <thead>
-    <tr>
-        <th scope="col">번호</th>
-        <th scope="col">제목</th>
-        <th scope="col">등록일자</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- 게시물 목록을 반복 -->
-    <tr th:each="board : ${boardList}">
-        <th scope="row">[[${board.boardSeq}]]</th>
-        <td>
-            <a th:href="@{/board/{boardSeq}(boardSeq=${board.boardSeq})}">
-                [[${board.title}]]
-            </a>
-        </td>
-        <td>[[${board.regDate}]]</td>
-    </tr>
     <!-- 게시물 데이터가 없는경우 -->
     <tr th:if="${boardList.size() == 0}">
         <td colspan="3">게시물이 존재하지 않습니다.</td>
     </tr>
-    </tbody>
+    </thead>
+
+
+    <div th:each="board : ${boardList}" class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <a th:href="@{/board/{boardSeq}(boardSeq=${board.boardSeq})}">
+                        [[${board.title}]]
+                    </a>
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+                    <a>[[${board.contents}]]</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </table>
     <button type="button" class="btn btn-primary" onclick="location.href='http://localhost:8080/board/form' " >글쓰기</button>

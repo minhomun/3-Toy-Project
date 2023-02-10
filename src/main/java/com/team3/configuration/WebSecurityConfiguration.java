@@ -30,14 +30,15 @@ public class WebSecurityConfiguration {
                         .permitAll()
                         .mvcMatchers(
                                 HttpMethod.GET,
+                                "/**",
                                 "/",
                                 "/login",
                                 "/registerForm"
-
                         )
                         .permitAll()
                         .mvcMatchers(
                                 HttpMethod.POST,
+                                "/**",
                                 "/login",
                                 "/checkUserInfo",
                                 "/idCheck",
@@ -61,6 +62,7 @@ public class WebSecurityConfiguration {
                 .csrf().disable();
         return http.build();
     }
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
