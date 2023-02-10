@@ -39,4 +39,10 @@
             (USER_ID, PASSWORD, NAME, PHONENUMBER, ROLE)
         VALUES (#{id}, #{password}, #{name}, #{phoneNumber}, #{role})
     </insert>
+
+    <select id="selectUserNo" parameterType="String" resultType="BigInteger">
+        SELECT USER_NO
+        FROM user_info
+        WHERE USER_ID = #{userId}
+    </select>
 </mapper>

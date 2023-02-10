@@ -1,10 +1,13 @@
 package com.team3.controller;
 
 import com.team3.domain.NoticeBoardComment;
+import com.team3.domain.SecurityUser;
 import com.team3.service.NoticeBoardCommentService;
+import com.team3.service.UserInfoService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +22,13 @@ public class NoticeBoardCommentController {
 
     private final NoticeBoardCommentService noticeBoardCommentService;
 
+    private final UserInfoService userInfoService;
+
     @GetMapping("/save")
     public String save(Model model,
-                       HttpSession httpSession,
                        @RequestParam String content,
-                       @RequestParam BigInteger tableNo) {
+                       @RequestParam BigInteger tableNo,
+                       Authentication authentication) {
 
 
         if (content.length() == 0 || content.equals("") || content == null) {
@@ -36,13 +41,11 @@ public class NoticeBoardCommentController {
             model.addAttribute("url", "/noticeboard/" + tableNo);
             return "/noticeBoard/redirect";
         }
-        // session 부분 일단 주석 처리
 
-//        String userId = (String) httpSession.getAttribute("userId");
-//        BigInteger userNo = (BigInteger) httpSession.getAttribute("userNO");
 
-        String userId = "normal";
-        BigInteger userNo = BigInteger.valueOf(2);
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        String userId = securityUser.getId();
+        BigInteger userNo = userInfoService.selectUserNo(userId);
 
         NoticeBoardComment comment = NoticeBoardComment.builder()
                 .userNo(userNo)
@@ -63,21 +66,21 @@ public class NoticeBoardCommentController {
     public String delete(Model model,
                          @RequestParam BigInteger tableNo,
                          @RequestParam BigInteger commentNo,
-                         HttpSession httpSession) {
+                         Authentication authentication) {
 
-        // 본인만 삭제 가능
-//        String userId = (String) httpSession.getAttribute("userId");
-//        if (userId != noticeBoardCommentService.selectComment(commentNo).getUserId()) {
-//            model.addAttribute("message", "본인만 삭제 가능합니다.");
-//            model.addAttribute("url", "/noticeboard/" + tableNo);
-//            return "/noticeBoard/redirect";
-//        }
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        String userId = securityUser.getId();
+        log.info(userId);
+        log.info(noticeBoardCommentService.selectComment(commentNo).getUserId());
+        if (!userId.equals(noticeBoardCommentService.selectComment(commentNo).getUserId())) {
+            model.addAttribute("message", "본인만 삭제 가능합니다.");
+            model.addAttribute("url", "/noticeboard/" + tableNo);
+            return "/noticeBoard/redirect";
+        }
 
 
-        log.info("되나?1");
         noticeBoardCommentService.deleteComment(commentNo);
 
-        log.info("되나?2");
         model.addAttribute("message", "삭제 되었습니다.");
         model.addAttribute("url", "/noticeboard/" + tableNo);
         return "/noticeBoard/redirect";

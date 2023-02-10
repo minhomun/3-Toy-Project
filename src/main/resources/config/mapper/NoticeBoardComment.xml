@@ -20,7 +20,11 @@
 
     <select id="selectComment" parameterType="BigInteger" resultType="com.team3.domain.NoticeBoardComment">
         SELECT
-            *
+            COMMENT_NO,
+            USER_ID,
+            USER_NO,
+            CONTENT,
+            DATE
         FROM
             notice_table_comment
         WHERE COMMENT_NO = #{commentNo}

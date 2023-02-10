@@ -1,13 +1,17 @@
 package com.team3.controller;
 
+import com.team3.domain.Criteria;
 import com.team3.domain.NoticeBoard;
 import com.team3.domain.NoticeBoardComment;
+import com.team3.domain.SecurityUser;
 import com.team3.dto.NoticeBoardDTO;
+import com.team3.dto.NoticeBoardPageDTO;
 import com.team3.service.NoticeBoardCommentService;
 import com.team3.service.NoticeBoardService;
-import jakarta.servlet.http.HttpSession;
+import com.team3.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +29,8 @@ public class NoticeBoardController {
 
     private final NoticeBoardCommentService noticeBoardCommentService;
 
+    private final UserInfoService userInfoService;
+
 
     /**
      * 목록 화면
@@ -34,14 +40,26 @@ public class NoticeBoardController {
      */
     @GetMapping
     public String displayBoard(Model model, @RequestParam(required = false) String query) {
-        log.info("실행됨?");
         List<NoticeBoard> boardList = noticeBoardService.selectNoticeBoardList(query);
 
         model.addAttribute("boardList", boardList);
 
-        log.info("실행됨?");
         return "noticeBoard/list";
     }
+
+    @GetMapping("/page")
+    public String boardList(Model model, @ModelAttribute Criteria criteria,
+                            @RequestParam(required = false) String query) {
+        if (query != null) {
+            criteria.setKeyword(query);
+        }
+        List<NoticeBoard> boardList = noticeBoardService.selectNoticeBoardListWithPaging(criteria);
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("pageMaker", new NoticeBoardPageDTO(noticeBoardService.getTotal(), 5, criteria));
+
+        return "noticeBoard/page";
+    }
+
 
     /**
      * 게시물 화면
@@ -49,10 +67,9 @@ public class NoticeBoardController {
      * @param tableNo
      * @return
      */
-    
+
     @GetMapping("/{tableNo}")
     public String displayBoard(Model model, @PathVariable("tableNo") BigInteger tableNo) {
-        log.info("dispalyBoard 실행");
 
         NoticeBoard board = noticeBoardService.selectNoticeBoard(tableNo);
         List<NoticeBoardComment> commentList = noticeBoardCommentService.selectNoticeBoardList(tableNo);
@@ -78,15 +95,16 @@ public class NoticeBoardController {
     /**
      * 게시글 등록
      * @param model
-     * @param httpSession
      * @param title
      * @param content
      * @return
      */
     @PostMapping("/save")
-    public String save(Model model, HttpSession httpSession, @RequestParam String title, @RequestParam String content) {
+    public String save(Model model,
+                       @RequestParam String title,
+                       @RequestParam String content,
+                       Authentication authentication) {
 
-        log.info("작동하나요?");
 
         if (title.length() == 0 || title.equals("") || title == null) {
             model.addAttribute("message", "제목을 입력해 주세요.");
@@ -109,17 +127,9 @@ public class NoticeBoardController {
             return "/noticeBoard/redirect";
         }
 
-
-        log.info("작동하나요?2");
-
-        // session 부분 일단 주석 처리
-
-//        String userId = (String) httpSession.getAttribute("userId");
-//        BigInteger userNo = (BigInteger) httpSession.getAttribute("userNO");
-
-
-        String userId = "normal";
-        BigInteger userNo = BigInteger.valueOf(2);
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        String userId = securityUser.getId();
+        BigInteger userNo = userInfoService.selectUserNo(userId);
 
         NoticeBoardDTO noticeBoardDTO = NoticeBoardDTO.builder()
                 .userNo(userNo)
@@ -128,11 +138,9 @@ public class NoticeBoardController {
                 .content(content)
                 .build();
 
-        log.info("작동하나요?3");
 
         noticeBoardService.insertNoticeBoard(noticeBoardDTO);
 
-        log.info("작동하나요?4");
         model.addAttribute("message", "저장되었습니다.");
         model.addAttribute("url", "/noticeboard");
 
@@ -143,22 +151,21 @@ public class NoticeBoardController {
      * 수정 화면
      * @param model
      * @param tableNo
-     * @param httpSession
      * @return
      */
     @GetMapping("/edit/{tableNo}")
     public String edit(Model model,
                        @PathVariable BigInteger tableNo,
-                       HttpSession httpSession) {
+                       Authentication authentication) {
         NoticeBoard noticeBoard = noticeBoardService.selectNoticeBoard(tableNo);
 
-        // 본인만 수정 가능
-//        String userId = (String) httpSession.getAttribute("userId");
-//        if (userId != noticeBoard.getUserId()) {
-//            model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
-//            model.addAttribute("url", String.valueOf(userId));
-//            return "/noticeBoard/redirect";
-//        }
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        String userId = securityUser.getId();
+        if (userId != noticeBoardService.selectNoticeBoard(tableNo).getUserId()) {
+            model.addAttribute("message", "본인만 수정 가능합니다.");
+            model.addAttribute("url", String.valueOf(userId));
+            return "/noticeBoard/redirect";
+        }
 
         model.addAttribute("board", noticeBoard);
         return "noticeBoard/write";
@@ -167,19 +174,18 @@ public class NoticeBoardController {
     /**
      * 게시글 수정
      * @param model
-     * @param httpSession
      * @param title
      * @param content
      * @param tableNo
      * @return
      */
     @PostMapping("/update")
-    public String update(Model model, HttpSession httpSession,
+    public String update(Model model,
                          @RequestParam String title,
                          @RequestParam String content,
-                         @RequestParam(required = false) BigInteger tableNo) {
+                         @RequestParam(required = false) BigInteger tableNo,
+                         Authentication authentication) {
 
-        log.info("작동하나요?");
 
         if (title.length() == 0 || title.equals("") || title == null) {
             model.addAttribute("message", "제목을 입력해 주세요.");
@@ -203,16 +209,9 @@ public class NoticeBoardController {
         }
 
 
-        log.info("작동하나요?2");
-
-        // session 부분 일단 주석 처리
-
-//        String userId = (String) httpSession.getAttribute("userId");
-//        BigInteger userNo = (BigInteger) httpSession.getAttribute("userNO");
-
-
-        String userId = "normal";
-        BigInteger userNo = BigInteger.valueOf(2);
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        String userId = securityUser.getId();
+        BigInteger userNo = userInfoService.selectUserNo(userId);
 
         NoticeBoard noticeBoard = NoticeBoard.builder()
                 .tableNo(tableNo)
@@ -222,11 +221,9 @@ public class NoticeBoardController {
                 .content(content)
                 .build();
 
-        log.info("작동하나요?3");
 
         noticeBoardService.updateNoticeBoard(noticeBoard);
 
-        log.info("작동하나요?4");
         model.addAttribute("message", "수정되었습니다.");
         model.addAttribute("url", "/noticeboard/" + tableNo);
 
@@ -238,28 +235,26 @@ public class NoticeBoardController {
      * 게시글 삭제
      * @param model
      * @param tableNo
-     * @param httpSession
      * @return
      */
     @PostMapping("/delete")
     public String delete(Model model,
                          @RequestParam BigInteger tableNo,
-                         HttpSession httpSession) {
+                         Authentication authentication) {
 
 //         본인만 삭제 가능
-//        String userId = (String) httpSession.getAttribute("userId");
-//        if (userId != noticeBoardService.selectNoticeBoard(tableNo).getUserId()) {
-//            model.addAttribute("message", "내용은 10~500자 사이만 작성할 수 있습니다.");
-//            model.addAttribute("url", String.valueOf(userId));
-//            return "/noticeBoard/redirect";
-//        }
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        String userId = securityUser.getId();
+        if (!userId.equals(noticeBoardService.selectNoticeBoard(tableNo).getUserId())) {
+            model.addAttribute("message", "본인만 삭제 가능합니다.");
+            model.addAttribute("url", "/noticeboard/" + tableNo);
+            return "/noticeBoard/redirect";
+        }
 
-        log.info("되나?1");
         noticeBoardService.deleteNoticeBoard(tableNo);
 
         noticeBoardCommentService.deleteAllComment(tableNo);
 
-        log.info("되나?2");
         model.addAttribute("message", "삭제 되었습니다.");
         model.addAttribute("url", "/noticeboard");
         return "/noticeBoard/redirect";
