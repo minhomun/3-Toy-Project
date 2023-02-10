@@ -1,5 +1,6 @@
 package com.team3.service;
 
+import com.team3.domain.Criteria;
 import com.team3.domain.NoticeBoard;
 import com.team3.dto.NoticeBoardDTO;
 import com.team3.mapper.NoticeBoardMapper;
@@ -34,6 +35,13 @@ public class NoticeBoardService {
 
     public void deleteNoticeBoard(BigInteger tableNo) {
         noticeBoardMapper.deleteNoticeBoard(tableNo);
+    }
+    public List<NoticeBoard> selectNoticeBoardListWithPaging(Criteria criteria){
+        return noticeBoardMapper.selectNoticeBoardListWithPaging(criteria);
+    }
+
+    public int getTotal() {
+        return noticeBoardMapper.getTotal();
     }
 
 }

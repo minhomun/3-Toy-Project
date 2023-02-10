@@ -58,4 +58,53 @@
         WHERE TABLE_NO = #{tableNo}
     </delete>
 
+    <sql id="search">
+        <if test="searchType != null">
+            <if test="searchType=='t'.toString()">
+                and title like CONCAT('%',#{keyword},'%')
+            </if>
+
+            <if test="searchType=='c'.toString()">
+                and content like CONCAT('%',#{keyword},'%')
+            </if>
+
+            <if test="searchType=='w'.toString()">
+                and USER_ID like CONCAT('%',#{keyword},'%')
+            </if>
+
+
+        </if>
+    </sql>
+
+    <select id="selectNoticeBoardListWithPaging" parameterType="com.team3.domain.Criteria"
+            resultType="com.team3.domain.NoticeBoard">
+
+        WITH cte AS (
+            SELECT
+                ROW_NUMBER() OVER (ORDER BY TABLE_NO DESC) as R,
+                    TABLE_NO,
+                TITLE,
+                CONTENT,
+                USER_ID,
+                DATE
+        FROM notice_table
+            )
+        SELECT
+            TABLE_NO,
+            TITLE,
+            CONTENT,
+            USER_ID,
+            DATE
+        FROM cte
+        WHERE R BETWEEN (#{pageNum} - 1) * #{amount} + 1 AND #{pageNum} * #{amount}
+        <if test="keyword != null and keyword.length() > 0">
+            AND TITLE LIKE CONCAT('%', CONCAT(#{keyword}, '%'))
+        </if>
+    </select>
+
+    <select id="getTotal" resultType="Integer">
+        select count(*)
+        from notice_table
+    </select>
+
 </mapper>

@@ -1,13 +1,14 @@
 package com.team3.controller;
 
+import com.team3.domain.Criteria;
 import com.team3.domain.NoticeBoard;
 import com.team3.domain.NoticeBoardComment;
 import com.team3.domain.SecurityUser;
 import com.team3.dto.NoticeBoardDTO;
+import com.team3.dto.NoticeBoardPageDTO;
 import com.team3.service.NoticeBoardCommentService;
 import com.team3.service.NoticeBoardService;
 import com.team3.service.UserInfoService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
@@ -46,13 +47,27 @@ public class NoticeBoardController {
         return "noticeBoard/list";
     }
 
+    @GetMapping("/page")
+    public String boardList(Model model, @ModelAttribute Criteria criteria,
+                            @RequestParam(required = false) String query) {
+        if (query != null) {
+            criteria.setKeyword(query);
+        }
+        List<NoticeBoard> boardList = noticeBoardService.selectNoticeBoardListWithPaging(criteria);
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("pageMaker", new NoticeBoardPageDTO(noticeBoardService.getTotal(), 5, criteria));
+
+        return "noticeBoard/page";
+    }
+
+
     /**
      * 게시물 화면
      * @param model
      * @param tableNo
      * @return
      */
-    
+
     @GetMapping("/{tableNo}")
     public String displayBoard(Model model, @PathVariable("tableNo") BigInteger tableNo) {
 

@@ -1,5 +1,6 @@
 package com.team3.mapper;
 
+import com.team3.domain.Criteria;
 import com.team3.domain.NoticeBoard;
 import com.team3.dto.NoticeBoardDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -19,4 +20,8 @@ public interface NoticeBoardMapper {
     public void updateNoticeBoard(NoticeBoard noticeBoard);
 
     public void deleteNoticeBoard(BigInteger tableNo);
+
+    public List<NoticeBoard> selectNoticeBoardListWithPaging(Criteria criteria);
+
+    public int getTotal();
 }
